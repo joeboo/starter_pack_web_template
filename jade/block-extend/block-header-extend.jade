@@ -1,0 +1,100 @@
+doctype 
+//if lt IE 7
+html( lang="en" ).no-js.lt-ie9.lt-ie8.lt-ie7 
+//if IE 7
+  html.no-js.lt-ie9.lt-ie8  
+//if IE 8
+  html.no-js.lt-ie9  
+// [if gt IE 8] <!
+  
+html.no-js
+  // <![endif]
+  head
+    meta(charset='utf-8')
+             
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+             
+    title
+      block title
+             
+    meta(name='description', content='')
+             
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0', name='viewport')
+    // <meta name="viewport" content="width=device-width, initial-scale=1">
+    // <meta name="viewport" content="width=device-width, user-scalable=no" />
+    // Place favicon.ico and apple-touch-icon.png in the root directory
+    link(rel='stylesheet', href='css/style.css')
+             
+    link(href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic', rel='stylesheet', type='text/css')
+             
+    link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
+             
+    script(src='js/modernizr.custom.87008.js')
+
+body
+  //if lt IE 7
+    p.browsehappy
+      | You are using an 
+      strong outdated
+      |  browser. Please 
+      a(href='http://browsehappy.com/') upgrade your browser
+      |  to improve your experience.
+  | &#x9;
+
+  header.l-header
+    .container
+      .row
+        // Logo
+        .col-lg-6.col-md-6.col-sm-6
+          a.logo(href='index.html')
+            img(src='images/logo.png', alt='Logo')
+            | Transform Sound UK 
+            span.sub-logo DESIGN &bull; SUPPLY &bull; INSTALLATION
+        // end col-lg-6
+        // Tel/Free Quote
+        .col-lg-6.col-md-6.hidden-xs
+          .tel-quote.fr
+            ul
+              li
+                | Call today for a free quote 
+                span 020798900349
+        // end col-lg-6
+      // end row
+    // end container
+  // Navigation
+  .nav-container
+    .container
+      .row
+        span
+          // Main Navigation
+        |             
+        .col-lg-12.col-md-12.col-sm-12
+          span
+            a#nav-menu.nav-menu
+          |                 
+          nav#nav.l-nav.align-left
+            ul
+              li
+                span
+                  a(href='#') Home
+                                       
+              li
+                span
+                  a(href='services/domestic-residentialsoundproffing') Services
+                                       
+              li
+                span
+                  a(href='#') Noisy Neighbours
+                                       
+              li
+                span
+                  a(href='#') Testimonials
+                                       
+              li
+                span
+                  a(href='#') Contact Us
+
+  include ../home-slider
+  include ../home-content
+  include ../footer
+

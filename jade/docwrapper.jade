@@ -1,0 +1,86 @@
+block config
+	include config.jade
+
+doctype
+html( lang="en" )
+	head
+		title
+			block title
+				//- Variable used in text via interpolation
+				| #{PageTitle}
+		
+		meta( charset='utf-8' )
+		meta( http-equiv='X-UA-Compatible', content='IE=edge' )
+		meta( name='viewport', content='width=device-width, initial-scale=1.0' )
+		//- Meta description drawn from config file
+		meta( name='description', content=MetaDesc )
+		
+		//- This will load from Google Fonts, but only if font names are specified in the config
+		if GoogleFonts
+			link( href='//fonts.googleapis.com/css?family=' + GoogleFonts, rel='stylesheet', type='text/css' )
+		
+		//- This will load jQuery, but only if you switch it on in config
+		if jQuery
+			script( src='js/min/plugin-min.js' )
+
+				
+		
+		block stylesheets
+			link( href='css/style.css', rel='stylesheet', type='text/css' )
+			link( href='//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet', type='text/css' )
+
+	body(class=BodyClasses)
+		header.l-header
+			.container
+				.row
+					.col-lg-6.col-md-6.col-sm-6
+						a.logo(href='index.html')
+							//- img(src="images/logo.png", alt="Transform Sound Proofing London")
+							| Transform Sound UK 
+							span.sub-logo DESIGN &bull; SUPPLY &bull; INSTALLATION
+					.col-lg-6.col-md-6.hidden-xs
+						.tel-quote.fr
+							ul
+								li Call today for a free quote 
+									span 020798900349
+
+
+		.nav-container
+			.container
+				.row
+					.col-lg-12.col-md-12.col-sm-12
+						span
+							a#nav-menu.nav-menu
+								i.fa.fa-bars
+						nav#nav.l-nav.align-left.dropdown
+							ul
+								li
+									
+									a(href='/') Some Text 
+								li
+									a#dLabel(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")(href='/') Services
+										span.caret
+
+									ul.dropdown-menu(role="menu" aria-labelledby="dLabel")
+										li
+											a(href='/') Some Text 
+										li
+											a(href='/')
+										li
+											a(href='/') Some Text 	
+										li
+											a(href='/') Some Text 
+											
+								li					
+									a(href='#') Some Text 
+								li
+									
+									a(href='#') Some Text 
+								li
+									
+									a(href='#') Some Text 
+		block content
+
+
+
+
