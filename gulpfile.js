@@ -12,11 +12,9 @@ var $    = require('gulp-load-plugins')(),
   notify = require('gulp-notify'),
   cache = require('gulp-cache'),
   rename = require('gulp-rename'),
-  cssnano = require('gulp-cssnano');
+  cssnano = require('gulp-cssnano'),
+  browserSync = require('browser-sync').create();
 
-
-// Note:
-// Adding this return statement acts as a promise. Without the return statement, other tasks won't know when the concatScripts tasks as finished and so they'll start right away, instead of waiting for it to finish.
 var sassPaths = [
   'bower_components/foundation/scss'
 ];
@@ -33,27 +31,29 @@ gulp.task('sass', function() {
       browsers: ['last 2 versions', 'ie >= 8']
     }))
    .pipe(rename({ suffix: '.min' }))
-    // .pipe(cssnano())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist/css'))
-    .pipe(notify({ message: 'Styles task complete' }));
+    .pipe(browserSync.stream())
+    .pipe(notify({
+      message: 'Styles task complete'
+    }));
 });
 
 
 // Gulp Compile JADE Task
 gulp.task('jade', function () {
-	return gulp.src("jade/index.jade")
-	.pipe(jade({
+  return gulp.src("jade/index.jade")
+  .pipe(jade({
       pretty: true
     }))
-	.pipe(gulp.dest('jade'));
+  .pipe(gulp.dest('jade'));
 })
 
 
 // Gulp Image Compressed Task
 gulp.task('imagemin', function() {
 gulp.src('img/*')
-	.pipe(plumber())
+  .pipe(plumber())
 .pipe(imagemin())
 .pipe(gulp.dest('dest/img'));
 });
@@ -71,9 +71,42 @@ gulp.task('sprite', function () {
   spriteData.css.pipe(gulp.dest('css'));
 });
 
+
+
+gulp.task('watch', function (done) {
+  gulp.watch('./scss/**/*.scss', ['sass']);
+  // gulp.watch('jade/index.jade', ['jade']);
+});
+
+
+
 gulp.task('clear', function (done) {
   return cache.clearAll(done);
 });
-gulp.task("default", function() {
-  console.log('workig...');
+
+
+gulp.task('default', ['sass','jade','browser-sync'], function () {
+
+  gulp.watch('./scss/**/*.scss', ['sass', browserSync.reload]);
+  // gulp.watch('./assets/js/**/*.js', ['browserifyscriptsJs', browserSync.reload]);
+  gulp.watch('./js/*.js', ['browserifyVendorsJs', browserSync.reload]);
+});
+
+
+
+
+
+gulp.task('sass-watch', ['sass'], function (done) {
+    browserSync.reload();
+    done();
+});
+// Static Server + watching scss/html files
+gulp.task('serve', ['sass'], function() {
+
+    browserSync.init({
+        server: "./"
+    });
+
+  gulp.watch("./scss/**/*.scss", ['sass']);
+  gulp.watch("./*.html").on('change', browserSync.reload);
 });
