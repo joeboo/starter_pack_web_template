@@ -1,11 +1,11 @@
 "use strict";
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')(),
+let gulp = require('gulp');
+let gulpLoadPlugins = require('gulp-load-plugins'),
     sass = require('gulp-sass'),
     plumber = require('gulp-plumber'),
     sourcemaps = require('gulp-sourcemaps'),
-    jade = require('gulp-jade'),
+    pug = require('gulp-pug'),
     prefix = require('gulp-autoprefixer'),
     imagemin = require('gulp-imagemin'),
     spritesmith = require('gulp.spritesmith'),
@@ -18,19 +18,24 @@ var $ = require('gulp-load-plugins')(),
     del = require('del'),
     concat = require('gulp-concat'),
     html5Lint = require('gulp-html5-lint'),
-    prefix = require('gulp-autoprefixer'),
-    imagemin = require('gulp-imagemin'),
     cmq = require('gulp-combine-media-queries'),
     ignore = require('gulp-ignore'), // Helps with ignoring files and directories in our run tasks
     jshint = require('gulp-jshint'),
     eslint = require('gulp-eslint'),
     reload = browserSync.reload,
     babel = require("gulp-babel"),
-    runSequence = require('run-sequence');
+    runSequence = require('run-sequence'),
+    browserify = require('browserify'),
+    babelify = require('babelify'),
+    source = require('vinyl-source-stream'),
+    fs = require('fs');
+
+const $ = gulpLoadPlugins();
 
 
 var sassPaths = [
-    'bower_components/foundation/scss'
+    // 'bower_components/foundation/scss'
+    'bower_components/bootstrap-sass/assets/stylesheets/bootstrap'
 ];
 
 
@@ -38,7 +43,7 @@ gulp.task('sass', function() {
     return gulp.src('scss/style.scss')
         .pipe(sourcemaps.init())
         .pipe($.sass({
-            includePaths: sassPaths,
+            // includePaths: sassPaths,
             outputStyle: 'expanded'
         }).on('error', $.sass.logError))
         .pipe($.autoprefixer({
@@ -46,33 +51,35 @@ gulp.task('sass', function() {
         }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist/css'))
+        .pipe(gulp.dest('./test/css'))
         .pipe(browserSync.stream())
         .pipe(notify({
-            message: 'Styles task complete'
+            message: 'Styles task completed'
         }));
 });
 
 
-
-
 // Gulp Concat Scripts Task
 gulp.task('scripts', function() {
-    // return gulp.src([
-    //         'bower_components/jquery/dist/jquery.js',
-    //         'bower_components/what-input/what-input.js',
-    //         'bower_components/foundation-sites/dist/foundation.js',
-    //         'scripts/**/*.js'
-    //     ])
-    return gulp.src('./app/js/**/*.js')
-        .pipe(plumber())
+    // return gulp.src('./js/**/*.js')
+    return gulp.src([
+            'bower_components/jquery/dist/jquery.js',
+            'bower_components/jquery.cookie/jquery.cookie.js',
+            './js/**/*.js'
+        ])
+        .pipe($.plumber())
         .pipe(sourcemaps.init())
         .pipe(babel())
         .pipe(concat('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./test/js'))
-        .pipe(reload({ stream: true }));
+        .pipe(browserSync.stream())
+        .pipe(notify({
+            message: 'Scripts task completed'
+        }));
 });
+
+
 
 // Gulp Minify Scripts Task
 // this allows you to run concatScripts first then minifyScripts task will runs straight after
@@ -101,14 +108,23 @@ gulp.task('minifyScripts', ['scripts'], function() {
 
 
 
-// Gulp Compile JADE Task
-gulp.task('jade', function() {
-    return gulp.src("jade/index.jade")
-        .pipe(jade({
+// Gulp Compile pug Task
+// gulp.task('pug', function() {
+//     return gulp.src("pug/index.pug")
+//         .pipe(pug({
+//             pretty: true
+//         }))
+//         .pipe(gulp.dest('pug'));
+// });
+
+gulp.task('pug', function buildHTML() {
+    return gulp.src("pug/index.pug")
+        .pipe(pug({
             pretty: true
         }))
-        .pipe(gulp.dest('jade'));
-})
+        .pipe(gulp.dest('pug'));
+});
+
 
 
 // Gulp Image Compressed Task
@@ -140,23 +156,6 @@ gulp.task('watch', function(done) {
 });
 
 
-
-gulp.task('clear', function(done) {
-    return cache.clearAll(done);
-});
-
-
-gulp.task('default', ['sass', 'jade', 'browser-sync'], function() {
-
-    gulp.watch('./scss/**/*.scss', ['sass', browserSync.reload]);
-    // gulp.watch('./assets/js/**/*.js', ['browserifyscriptsJs', browserSync.reload]);
-    gulp.watch('./js/*.js', ['browserifyVendorsJs', browserSync.reload]);
-});
-
-
-
-
-
 gulp.task('sass-watch', ['sass'], function(done) {
     browserSync.reload();
     done();
@@ -171,3 +170,18 @@ gulp.task('serve', ['sass'], function() {
     gulp.watch("./scss/**/*.scss", ['sass']);
     gulp.watch("./*.html").on('change', browserSync.reload);
 });
+
+
+
+
+gulp.task('clear', function(done) {
+    return cache.clearAll(done);
+});
+
+
+// gulp.task('default', ['sass', 'jade', 'browser-sync'], function() {
+
+//     gulp.watch('./scss/**/*.scss', ['sass', browserSync.reload]);
+//     // gulp.watch('./assets/js/**/*.js', ['browserifyscriptsJs', browserSync.reload]);
+//     gulp.watch('./js/*.js', ['browserifyVendorsJs', browserSync.reload]);
+// });

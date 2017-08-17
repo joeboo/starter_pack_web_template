@@ -1,0 +1,22 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "eslint.options": {
+        "es6": true
+    },
+    // Git Bash
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+    "javascript.validate.enable": true,
+    "editor.renderIndentGuides": false,
+    "workbench.colorTheme": "Seti Monokai",
+    "workbench.startupEditor": "newUntitledFile",
+    "window.zoomLevel": -1,
+    "editor.fontSize": 17,
+    "terminal.integrated.fontSize": 16,
+    "terminal.integrated.shellArgs.osx": [
+        "0"
+    ],
+    "jshint.enable": true,
+    "materialTheme.cache.workbench.settings": {
+        "themeColours": "Light"
+    }
+}
